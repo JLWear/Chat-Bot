@@ -7,7 +7,8 @@ class OrientationChatbot:
         self.contexts = {}
 
     def create_context(self):
-        context_id = "session"  # simplification, un seul user ici
+        import uuid
+        context_id = str(uuid.uuid4())
         self.contexts[context_id] = {
             "stage": "ask_interest",
             "interests": None,
