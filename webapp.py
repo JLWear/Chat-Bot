@@ -7,7 +7,7 @@ app = Flask(__name__)
 bot = OrientationChatbot()
 context_id = bot.create_context()
 
-# HTML simplifié pour l'interface
+# Interface HTML basique
 HTML = '''
 <!DOCTYPE html>
 <html lang="fr">
@@ -36,11 +36,9 @@ HTML = '''
             const input = document.getElementById('input');
             const message = input.value;
             if (!message) return;
-            // afficher le message utilisateur
             const chat = document.getElementById('chatbox');
             chat.innerHTML += `<div class='user'>Moi: ${message}</div>`;
             input.value = '';
-            // requête au serveur
             const res = await fetch('/chat', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -67,4 +65,7 @@ def chat():
     return jsonify({'response': response})
 
 if __name__ == '__main__':
-    app.run(debug=True, port=5000)
+    import os
+    port = int(os.environ.get('PORT', 5000))
+    # Bind to 0.0.0.0 so Render can detect the open port
+    app.run(debug=True, host='0.0.0.0', port=port)
