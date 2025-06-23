@@ -32,6 +32,9 @@ HTML = '''
     <button onclick="send()">Envoyer</button>
 
     <script>
+        if (!sessionStorage.getItem('context_id')) {
+            sessionStorage.setItem('context_id', Math.random().toString(36).substring(2));
+        }
         async function send() {
             const input = document.getElementById('input');
             const message = input.value;
@@ -39,12 +42,15 @@ HTML = '''
             const chat = document.getElementById('chatbox');
             chat.innerHTML += `<div class='user'>Moi: ${message}</div>`;
             input.value = '';
+
+            const context_id = sessionStorage.getItem('context_id');
             const res = await fetch('/chat', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ message })
+                body: JSON.stringify({ message, context_id })
             });
             const data = await res.json();
+            sessionStorage.setItem('context_id', data.context_id); // Au cas où le serveur en crée un nouveau
             chat.innerHTML += `<div class='bot'>Bot: ${data.response}</div>`;
             chat.scrollTop = chat.scrollHeight;
         }
@@ -61,8 +67,14 @@ def index():
 def chat():
     data = request.get_json() or {}
     message = data.get('message', '')
-    response = bot.process_message(context_id, message)
-    return jsonify({'response': response})
+    client_context_id = data.get('context_id')
+
+    # Crée un contexte si le client n’en a pas encore
+    if not client_context_id or client_context_id not in bot.contexts:
+        client_context_id = bot.create_context()
+
+    response = bot.process_message(client_context_id, message)
+    return jsonify({'response': response, 'context_id': client_context_id})
 
 if __name__ == '__main__':
     import os
