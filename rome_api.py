@@ -105,6 +105,60 @@ local_metiers = {
             )
         },
     ],
+     "art": [
+        {
+            "code": "E1101",
+            "libelle": "Peintre décorateur",
+            "description": (
+                "Le peintre décorateur applique des peintures, vernis et revêtements muraux.\n"
+                "En savoir plus : https://www.onisep.fr/Ressources/Univers-Metier/Metiers/peintre-decorateur"
+            )
+        },
+        {
+            "code": "E1104",
+            "libelle": "Illustrateur",
+            "description": (
+                "L’illustrateur réalise des images pour livres, presse ou publicité.\n"
+                "En savoir plus : https://www.onisep.fr/Ressources/Univers-Metier/Metiers/illustrateur"
+            )
+        },
+    ],
+    "sante": [
+        {
+            "code": "J1502",
+            "libelle": "Infirmier",
+            "description": (
+                "L’infirmier assure les soins généraux et l’accompagnement des patients.\n"
+                "En savoir plus : https://www.onisep.fr/Ressources/Univers-Metier/Metiers/infirmier"
+            )
+        },
+        {
+            "code": "J1503",
+            "libelle": "Aide-soignant",
+            "description": (
+                "L’aide-soignant assiste l’infirmier et prend en charge l’hygiène et le confort du patient.\n"
+                "En savoir plus : https://www.onisep.fr/Ressources/Univers-Metier/Metiers/aide-soignant"
+            )
+        },
+    ],
+    "education": [
+        {
+            "code": "K2104",
+            "libelle": "Professeur des écoles",
+            "description": (
+                "Le professeur des écoles enseigne aux élèves du primaire.\n"
+                "En savoir plus : https://www.onisep.fr/Ressources/Univers-Metier/Metiers/professeur-des-ecoles"
+            )
+        },
+        {
+            "code": "K2105",
+            "libelle": "Éducateur spécialisé",
+            "description": (
+                "L’éducateur spécialisé accompagne des publics en difficulté sociale.\n"
+                "En savoir plus : https://www.onisep.fr/Ressources/Univers-Metier/Metiers/educateur-specialise"
+            )
+        },
+    ],
 }
 
 

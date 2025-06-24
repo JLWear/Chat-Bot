@@ -1,5 +1,20 @@
+# chatbot.py
 from rome_api import RomeAPI
 import re
+from spellchecker import SpellChecker
+
+# Initialisation du correcteur
+spell = SpellChecker(language='fr')
+
+def correct_spelling(text):
+    corrected_words = []
+    for word in text.split():
+        if word.lower() not in spell:
+            suggestion = spell.correction(word)
+            corrected_words.append(suggestion or word)
+        else:
+            corrected_words.append(word)
+    return " ".join(corrected_words)
 
 class OrientationChatbot:
     def __init__(self):
@@ -24,6 +39,9 @@ class OrientationChatbot:
         return None
 
     def process_message(self, context_id, message):
+        # Correction orthographique
+        message = correct_spelling(message)
+
         context = self.contexts.get(context_id)
         if not context:
             return "Erreur : contexte introuvable."
@@ -35,14 +53,15 @@ class OrientationChatbot:
                 metiers = self.rome_api.search_metiers(message)
             except Exception as e:
                 print(f"[ERREUR API] {e}")
-                print(f"[INFO] Utilisation du dictionnaire local pour : {message.lower()}")
                 from local_metiers import METIERS_PAR_INTERET
                 metiers = METIERS_PAR_INTERET.get(message.lower(), [])
 
             if not metiers:
-                return ("Aucun métier trouvé pour cet intérêt pour le moment. "
-                        "Tu peux explorer plus de métiers sur le site de l’ONISEP : "
-                        "https://www.onisep.fr")
+                return (
+                    "Aucun métier trouvé pour cet intérêt pour le moment. "
+                    "Tu peux explorer plus de métiers sur le site de l’ONISEP : "
+                    "https://www.onisep.fr"
+                )
 
             suggestions = metiers[:3]
             context["metiers"] = suggestions
@@ -68,7 +87,10 @@ class OrientationChatbot:
                 print(f"[ERREUR API - détail] {e}")
                 desc = "Description non disponible."
 
-            return f"Voici une fiche métier pour {selected['libelle']} :\n{desc}\nEst-ce que ce métier t'intéresse ? (oui/non)"
+            return (
+                f"Voici une fiche métier pour {selected['libelle']} :\n{desc}\n"
+                "Est-ce que ce métier t'intéresse ? (oui/non)"
+            )
 
         if stage == "show_detail":
             if "oui" in message.lower():
